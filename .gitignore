@@ -1,0 +1,21 @@
+# Visual Studio / Rider / IDE
+.vs/
+.idea/
+*.sln
+*.suo
+*.user
+
+# Unreal Engine Build Artifacts
+Binaries/
+Intermediate/
+DerivedDataCache/
+Saved/
+Build/
+
+# Python
+__pycache__/
+*.pyc
+
+# Local scratch and logs
+scratch/
+*.log

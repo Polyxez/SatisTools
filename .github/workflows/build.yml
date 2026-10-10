@@ -1,0 +1,56 @@
+name: SatisTools Mod CI & Release
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  validate-and-package:
+    name: Validate Logic & Package Mod
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate Plugin Manifest (JSON)
+        run: |
+          python -c "import json; json.load(open('SatisTools.uplugin'))"
+          echo "SatisTools.uplugin is valid JSON!"
+
+      - name: Run Core Logic Unit Tests
+        run: |
+          python tests/test_map_logic.py
+
+      - name: Create SatisTools Distribution Package
+        run: |
+          mkdir -p dist/SatisTools
+          cp -r SatisTools.uplugin Source Content docs REQUIREMENTS.md dist/SatisTools/
+          cd dist
+          zip -r ../SatisTools.zip SatisTools
+          cd ..
+
+      - name: Upload Mod Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SatisTools-Mod-Build
+          path: SatisTools.zip
+          retention-days: 14
+
+      - name: Release SatisTools
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: SatisTools.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
