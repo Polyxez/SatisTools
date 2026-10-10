@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SatisTools - Высокодетализированная интерактивная карта (SCIM Style)</title>
+<title>SatisTools - Высокодетализированная интерактивная карта Satisfactory (SCIM Fidelity)</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
   body {
@@ -17,13 +17,13 @@
 
   /* SIDEBAR */
   #sidebar {
-    width: 390px;
+    width: 410px;
     background: #151921;
     border-right: 1px solid #2d333b;
     display: flex;
     flex-direction: column;
     z-index: 10;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.6);
   }
   #header {
     padding: 16px 20px;
@@ -44,17 +44,62 @@
     margin-top: 4px;
   }
 
+  /* CONNECTION BAR */
+  #connection-bar {
+    padding: 10px 18px;
+    background: #12161f;
+    border-bottom: 1px solid #262c36;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+  }
+  .conn-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #eab308;
+    box-shadow: 0 0 8px #eab308;
+    transition: all 0.3s;
+  }
+  .status-dot.online {
+    background: #22c55e;
+    box-shadow: 0 0 10px #22c55e;
+  }
+  .conn-controls {
+    display: flex;
+    gap: 6px;
+  }
+  .sync-btn {
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .sync-btn:hover { background: #30363d; color: #fff; }
+
   .panel-section {
-    padding: 14px 18px;
+    padding: 12px 18px;
     border-bottom: 1px solid #21262d;
   }
   .panel-title {
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.6px;
     color: #8b949e;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -91,7 +136,7 @@
   .layer-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 6px;
   }
   .layer-item {
     display: flex;
@@ -99,7 +144,7 @@
     gap: 8px;
     font-size: 12px;
     cursor: pointer;
-    padding: 4px 6px;
+    padding: 5px 8px;
     border-radius: 4px;
     background: #1c212a;
     transition: background 0.15s;
@@ -111,13 +156,13 @@
   .analytics-container {
     flex: 1;
     overflow-y: auto;
-    padding: 16px 18px;
+    padding: 14px 18px;
   }
   .empty-hint {
     color: #8b949e;
     font-size: 13px;
     text-align: center;
-    padding: 30px 10px;
+    padding: 24px 12px;
     line-height: 1.6;
     background: #191e27;
     border: 1px dashed #30363d;
@@ -126,36 +171,36 @@
   .stat-card {
     background: #1c212a;
     border-radius: 8px;
-    padding: 14px;
-    margin-bottom: 12px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
     border: 1px solid #30363d;
   }
   .stat-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 7px;
-    font-size: 13px;
+    margin-bottom: 6px;
+    font-size: 12px;
   }
   .stat-row:last-child { margin-bottom: 0; }
   .stat-val { font-weight: 700; color: #58a6ff; }
   
   .rate-list {
-    margin-top: 8px;
+    margin-top: 6px;
     font-size: 12px;
-    max-height: 220px;
+    max-height: 180px;
     overflow-y: auto;
   }
   .rate-item {
     display: flex;
     justify-content: space-between;
-    padding: 5px 0;
+    padding: 4px 0;
     border-bottom: 1px solid #282e38;
   }
   .rate-pos { color: #3fb950; font-weight: 700; }
   .rate-neg { color: #f85149; font-weight: 700; }
   
   .zone-actions {
-    margin-top: 14px;
+    margin-top: 10px;
     display: flex;
     gap: 8px;
   }
@@ -164,9 +209,9 @@
     background: #238636;
     border: none;
     color: white;
-    padding: 10px;
+    padding: 9px;
     border-radius: 6px;
-    font-size: 13px;
+    font-size: 12px;
     cursor: pointer;
     font-weight: 700;
     transition: background 0.15s;
@@ -175,7 +220,7 @@
 
   .saved-zones-list {
     margin-top: 4px;
-    max-height: 130px;
+    max-height: 110px;
     overflow-y: auto;
   }
   .saved-zone-badge {
@@ -183,10 +228,10 @@
     justify-content: space-between;
     align-items: center;
     background: #1c212a;
-    padding: 7px 10px;
+    padding: 6px 10px;
     border-radius: 5px;
     font-size: 12px;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
     cursor: pointer;
     border-left: 4px solid #58a6ff;
     transition: background 0.15s;
@@ -197,7 +242,7 @@
   #map-container {
     flex: 1;
     position: relative;
-    background: #d8d4c9; /* Satisfactory topographic terrain tone */
+    background: #11141a;
     overflow: hidden;
     cursor: grab;
   }
@@ -279,7 +324,18 @@
 <div id="sidebar">
   <div id="header">
     <h1><span>🏭</span> SatisTools: Карта</h1>
-    <p>Высокая детализация • SCIM Architecture • Satisfactory 1.2</p>
+    <p>100% SCIM Детализация • Satisfactory v1.2</p>
+  </div>
+
+  <div id="connection-bar">
+    <div class="conn-status">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="status-text">Демо-комплекс (Офлайн)</span>
+    </div>
+    <div class="conn-controls">
+      <button class="sync-btn" onclick="fetchLiveData()" title="Обновить данные из игры">🔄 Обновить</button>
+      <button class="sync-btn" onclick="toggleAutoSync()" id="btn-autosync">⏱ Авто: Выкл</button>
+    </div>
   </div>
 
   <div class="panel-section">
@@ -294,6 +350,7 @@
   <div class="panel-section">
     <div class="panel-title">Слои отображения</div>
     <div class="layer-grid">
+      <label class="layer-item"><input type="checkbox" id="layer-map" checked onchange="redraw()"> Топография карты</label>
       <label class="layer-item"><input type="checkbox" id="layer-foundations" checked onchange="redraw()"> Фундаменты</label>
       <label class="layer-item"><input type="checkbox" id="layer-factories" checked onchange="redraw()"> Фабрики & Станки</label>
       <label class="layer-item"><input type="checkbox" id="layer-conveyors" checked onchange="redraw()"> Конвейеры (Mk.1-6)</label>
@@ -332,65 +389,118 @@
   <div id="map-floating-tools">
     <button class="floating-btn" onclick="zoomIn()" title="Приблизить">+</button>
     <button class="floating-btn" onclick="zoomOut()" title="Отдалить">−</button>
+    <button class="floating-btn" onclick="focusPlayer()" title="Фокус на игроке">🎯</button>
     <button class="floating-btn" onclick="resetView()" title="Сбросить камеру">⟲</button>
   </div>
 
-  <div id="hint-overlay">Колесо: Зум • ЛКМ/ПКМ: Панорамирование • Рамка / Лассо для анализа</div>
+  <div id="hint-overlay">Колесо: Зум • ЛКМ: Панорамирование / Выделение • Рамка или Лассо для анализа</div>
   <div id="coords-overlay">X: 0 | Y: 0 UU (100% Масштаб)</div>
 </div>
 
 <script>
-// SATISFACTORY WORLD BOUNDS (Unreal Units, 1 UU = 1 cm)
-const WORLD_MIN_X = -324698.0;
-const WORLD_MAX_X = 425301.0;
+// =============================================================
+// SATISFACTORY WORLD COORDINATE BOUNDS (Deck.gl / SCIM specs)
+// =============================================================
+const WORLD_MIN_X = -324698.16796875;
+const WORLD_MAX_X = 425301.83203125;
 const WORLD_MIN_Y = -375000.0;
 const WORLD_MAX_Y = 375000.0;
+const WORLD_WIDTH = WORLD_MAX_X - WORLD_MIN_X;   // 750,000 UU
+const WORLD_HEIGHT = WORLD_MAX_Y - WORLD_MIN_Y; // 750,000 UU
 
 let currentMode = 'pan';
-let zoom = 3.5; // Start nicely zoomed into the detailed base like in the user's screenshot!
-let panX = -250;
-let panY = -180;
+let zoom = 1.0;
+let panX = 0;
+let panY = 0;
 let isDragging = false;
 let startX, startY;
 let boxStart = null, boxEnd = null;
 let lassoPoints = [];
 let savedZones = [];
 let currentAnalytics = null;
+let isOnline = false;
+let autoSyncInterval = null;
+let frmHost = "http://localhost:8080";
 
 const canvas = document.getElementById('map-canvas');
 const ctx = canvas.getContext('2d');
 const container = document.getElementById('map-container');
 const coordsOverlay = document.getElementById('coords-overlay');
 
-function resizeCanvas() {
-  canvas.width = container.clientWidth;
-  canvas.height = container.clientHeight;
+// =============================================================
+// ASSET MANAGEMENT & PRELOADING
+// =============================================================
+const mapImage = new Image();
+mapImage.src = 'assets/map/map.avif';
+let mapImageLoaded = false;
+mapImage.onload = () => {
+  mapImageLoaded = true;
   redraw();
-}
-window.addEventListener('resize', resizeCanvas);
+};
 
-// COORDINATE TRANSFORMS
+const iconCache = {};
+function loadIcon(name, path) {
+  const img = new Image();
+  img.src = path;
+  iconCache[name] = img;
+  img.onload = () => redraw();
+}
+
+// Preload authentic game icons
+loadIcon('iron', 'assets/map/classnamed/Desc_OreIron_C.avif');
+loadIcon('copper', 'assets/map/classnamed/Desc_OreCopper_C.avif');
+loadIcon('coal', 'assets/map/classnamed/Desc_Coal_C.avif');
+loadIcon('limestone', 'assets/map/classnamed/Desc_Stone_C.avif');
+loadIcon('caterium', 'assets/map/classnamed/Desc_OreGold_C.avif');
+loadIcon('bauxite', 'assets/map/classnamed/Desc_OreBauxite_C.avif');
+loadIcon('quartz', 'assets/map/classnamed/Desc_RawQuartz_C.avif');
+loadIcon('oil', 'assets/map/classnamed/Desc_LiquidOil_C.avif');
+loadIcon('uranium', 'assets/map/classnamed/Desc_OreUranium_C.avif');
+loadIcon('water', 'assets/map/classnamed/Desc_Water_C.avif');
+loadIcon('nitrogen', 'assets/map/classnamed/Desc_NitrogenGas_C.avif');
+loadIcon('sam', 'assets/map/classnamed/Desc_SAM_C.avif');
+loadIcon('pioneer', 'assets/map/normal/MonochromeIcons/TXUI_MIcon_Pioneer.avif');
+loadIcon('crash', 'assets/map/normal/stamps/TXUI_Crash_Map.avif');
+loadIcon('train', 'assets/map/normal/MonochromeIcons/TXUI_MIcon_Train.avif');
+loadIcon('doggo', 'assets/map/classnamed/Char_SpaceRabbit_C.avif');
+loadIcon('slug', 'assets/map/normal/stamps/TXUI_Slug_Map.avif');
+loadIcon('crate', 'assets/map/normal/stamps/TXUI_Crate_Map.avif');
+
+// =============================================================
+// COORDINATE PROJECTION (UNREAL UNITS <-> CANVAS SCREEN)
+// =============================================================
 function worldToScreen(wx, wy) {
-  const u = (wx - WORLD_MIN_X) / (WORLD_MAX_X - WORLD_MIN_X);
-  const v = (wy - WORLD_MIN_Y) / (WORLD_MAX_Y - WORLD_MIN_Y);
-  const size = Math.min(canvas.width, canvas.height) * 1.6;
-  const sx = (canvas.width - size) / 2 + (u * size * zoom) + panX;
-  const sy = (canvas.height - size) / 2 + (v * size * zoom) + panY;
+  const u = (wx - WORLD_MIN_X) / WORLD_WIDTH;
+  const v = ((-wy) - WORLD_MIN_Y) / WORLD_HEIGHT;
+  const size = Math.min(canvas.width, canvas.height);
+  const sx = (canvas.width - size * zoom) / 2 + (u * size * zoom) + panX;
+  const sy = (canvas.height - size * zoom) / 2 + (v * size * zoom) + panY;
   return [sx, sy];
 }
 
 function screenToWorld(sx, sy) {
-  const size = Math.min(canvas.width, canvas.height) * 1.6;
-  const u = (sx - (canvas.width - size) / 2 - panX) / (size * zoom);
-  const v = (sy - (canvas.height - size) / 2 - panY) / (size * zoom);
-  const wx = WORLD_MIN_X + (u * (WORLD_MAX_X - WORLD_MIN_X));
-  const wy = WORLD_MIN_Y + (v * (WORLD_MAX_Y - WORLD_MIN_Y));
+  const size = Math.min(canvas.width, canvas.height);
+  const u = (sx - (canvas.width - size * zoom) / 2 - panX) / (size * zoom);
+  const v = (sy - (canvas.height - size * zoom) / 2 - panY) / (size * zoom);
+  const wx = WORLD_MIN_X + (u * WORLD_WIDTH);
+  const wy = - (WORLD_MIN_Y + (v * WORLD_HEIGHT));
   return [wx, wy];
 }
 
+function resizeCanvas() {
+  canvas.width = container.clientWidth;
+  canvas.height = container.clientHeight;
+  if (zoom === 1.0 && panX === 0 && panY === 0) {
+    resetView();
+  } else {
+    redraw();
+  }
+}
+window.addEventListener('resize', resizeCanvas);
+
 function zoomIn() {
   const oldZoom = zoom;
-  zoom = Math.min(40.0, zoom * 1.3);
+  zoom = Math.min(60.0, zoom * 1.35);
   panX = canvas.width/2 - (canvas.width/2 - panX) * (zoom / oldZoom);
   panY = canvas.height/2 - (canvas.height/2 - panY) * (zoom / oldZoom);
   redraw();
@@ -398,17 +508,30 @@ function zoomIn() {
 
 function zoomOut() {
   const oldZoom = zoom;
-  zoom = Math.max(0.4, zoom * 0.77);
+  zoom = Math.max(0.6, zoom * 0.74);
   panX = canvas.width/2 - (canvas.width/2 - panX) * (zoom / oldZoom);
   panY = canvas.height/2 - (canvas.height/2 - panY) * (zoom / oldZoom);
   redraw();
 }
 
 function resetView() {
-  zoom = 3.5;
-  panX = -canvas.width * 0.22;
-  panY = -canvas.height * 0.15;
+  // Focus into Crater Lakes / Center Complex by default
+  zoom = 5.2;
+  const [targetSx, targetSy] = worldToScreen(BASE_X, BASE_Y);
+  panX = canvas.width / 2 - targetSx;
+  panY = canvas.height / 2 - targetSy;
   redraw();
+}
+
+function focusPlayer() {
+  if (entities.length > 0) {
+    const p = entities[0];
+    const [psx, psy] = worldToScreen(p.x, p.y);
+    panX += (canvas.width / 2 - psx);
+    panY += (canvas.height / 2 - psy);
+    zoom = Math.max(8.0, zoom);
+    redraw();
+  }
 }
 
 function setMode(mode) {
@@ -421,321 +544,231 @@ function setMode(mode) {
   redraw();
 }
 
-// -------------------------------------------------------------
-// REALISTIC PROCEDURAL SATISFACTORY WORLD ARCHITECTURE
-// Exactly mirroring the user's screenshot: Crater Lakes, Foundations,
-// Dual Rails, Conveyor Busses with directional chevrons, Industrial Machines
-// -------------------------------------------------------------
-const BASE_X = -40000;
-const BASE_Y = 10000;
+// =============================================================
+// DEMO MEGA-COMPLEX (CRATER LAKES & MAIN INDUSTRIAL HUB)
+// Identical to user photo: Lake complex, multi-tier bus, dual rail
+// =============================================================
+const BASE_X = -25000;
+const BASE_Y = -120000;
 
-// 1. CRATER LAKES (Iconic turquoise water bodies with depth rings)
-const craterLakes = [
-  { x: BASE_X - 28000, y: BASE_Y + 12000, r: 18000 },
-  { x: BASE_X + 48000, y: BASE_Y + 22000, r: 14000 }
-];
-
-// 2. FOUNDATION PLATFORMS (8x8m Ficsit grid tiles)
 const foundationGrids = [
-  // Main Assembly Complex (Large grey grid slab on right)
-  { minX: BASE_X + 10000, maxX: BASE_X + 38000, minY: BASE_Y - 14000, maxY: BASE_Y + 18000 },
-  // Logistics Spine & Central Skybridge
-  { minX: BASE_X - 12000, maxX: BASE_X + 10000, minY: BASE_Y - 4000, maxY: BASE_Y + 4000 },
-  // North Smelting Foundry
-  { minX: BASE_X - 14000, maxX: BASE_X + 2000, minY: BASE_Y - 26000, maxY: BASE_Y - 12000 },
-  // Water Extraction Facility (in the lake)
-  { minX: BASE_X - 29500, maxX: BASE_X - 24500, minY: BASE_Y + 10000, maxY: BASE_Y + 15000 },
-  // Circular Reactor Platform in south
-  { minX: BASE_X - 6000, maxX: BASE_X + 6000, minY: BASE_Y + 24000, maxY: BASE_Y + 36000 }
+  // Mega Assembly Platform
+  { minX: BASE_X - 18000, maxX: BASE_X + 22000, minY: BASE_Y - 24000, maxY: BASE_Y + 12000 },
+  // Smelting Annex North
+  { minX: BASE_X - 25000, maxX: BASE_X - 5000, minY: BASE_Y - 42000, maxY: BASE_Y - 28000 },
+  // Chemical Refinery Wing
+  { minX: BASE_X + 12000, maxX: BASE_X + 32000, minY: BASE_Y - 38000, maxY: BASE_Y - 14000 },
+  // Lake Pump Station
+  { minX: BASE_X - 35000, maxX: BASE_X - 26000, minY: BASE_Y - 10000, maxY: BASE_Y + 2000 }
 ];
 
-// 3. BUILDINGS & FACTORIES
-const buildings = [];
-
-// Inside Main Assembly Complex
-for (let row = 0; row < 5; row++) {
-  for (let col = 0; col < 4; col++) {
-    const bx = BASE_X + 13000 + (col * 5500);
-    const by = BASE_Y - 10000 + (row * 5200);
-    const isManuf = (col >= 2);
+let buildings = [];
+// Populate industrial complex
+for (let r = 0; r < 6; r++) {
+  for (let c = 0; c < 5; c++) {
+    const bx = BASE_X - 14000 + (c * 6500);
+    const by = BASE_Y - 18000 + (r * 4800);
+    const isManuf = (c >= 3);
     buildings.push({
       x: bx, y: by,
-      w: isManuf ? 1800 : 1200,
-      h: isManuf ? 2200 : 1500,
+      w: isManuf ? 2200 : 1400,
+      h: isManuf ? 2600 : 1600,
       type: isManuf ? 'Manufacturer' : 'Assembler',
       power: isManuf ? 55.0 : 15.0,
-      producing: (row + col) % 5 !== 0,
-      hasPower: true,
+      producing: (r + c) % 7 !== 0,
       inputs: isManuf ? { "Усиленная пластина": 10.0, "Ротор": 10.0, "Резина": 40.0 } : { "Стальная балка": 20.0, "Винты": 120.0 },
       outputs: isManuf ? { "Модульный каркас": 2.0 } : { "Усиленная пластина": 5.0 }
     });
   }
 }
-
-// Inside North Foundry
-for (let row = 0; row < 4; row++) {
-  for (let col = 0; col < 3; col++) {
-    const bx = BASE_X - 11000 + (col * 4000);
-    const by = BASE_Y - 23000 + (row * 3200);
+// Smelters
+for (let r = 0; r < 4; r++) {
+  for (let c = 0; c < 4; c++) {
     buildings.push({
-      x: bx, y: by,
-      w: 900, h: 1000,
-      type: 'Constructor',
-      power: 4.0,
-      producing: true,
-      hasPower: true,
-      inputs: { "Железный слиток": 30.0 },
-      outputs: { "Железная пластина": 20.0 }
+      x: BASE_X - 23000 + (c * 4200),
+      y: BASE_Y - 39000 + (r * 3000),
+      w: 1100, h: 1200,
+      type: 'Smelter', power: 4.0, producing: true,
+      inputs: { "Железная руда": 30.0 },
+      outputs: { "Железный слиток": 30.0 }
     });
   }
 }
 
-// Water Extractors in crater lake
-buildings.push({
-  x: BASE_X - 27000, y: BASE_Y + 12500,
-  w: 1600, h: 1600,
-  type: 'WaterExtractor',
-  power: 20.0, producing: true, hasPower: true,
-  inputs: {}, outputs: { "Вода": 120.0 }
-});
-
-// 4. RAILWAYS (Dual Rail network, pink track)
+// Dual Railway Loop
 const railways = [
-  // Outer loop around main complex
   [
-    [BASE_X + 28000, BASE_Y - 18000],
-    [BASE_X + 32000, BASE_Y - 18000],
-    [BASE_X + 35000, BASE_Y - 14000],
-    [BASE_X + 35000, BASE_Y + 15000],
-    [BASE_X + 33000, BASE_Y + 20000],
-    [BASE_X + 26000, BASE_Y + 24000],
-    [BASE_X + 26000, BASE_Y + 32000]
-  ],
-  // Main Freight Trunk line
-  [
-    [BASE_X - 25000, BASE_Y - 3000],
-    [BASE_X + 10000, BASE_Y - 3000],
-    [BASE_X + 10000, BASE_Y + 18000]
+    [BASE_X - 30000, BASE_Y - 45000],
+    [BASE_X + 25000, BASE_Y - 45000],
+    [BASE_X + 38000, BASE_Y - 20000],
+    [BASE_X + 38000, BASE_Y + 15000],
+    [BASE_X + 15000, BASE_Y + 22000],
+    [BASE_X - 22000, BASE_Y + 22000],
+    [BASE_X - 32000, BASE_Y - 10000],
+    [BASE_X - 30000, BASE_Y - 45000]
   ]
 ];
 
-// 5. CONVEYOR BUSSES (Multi-line belts with Mk.1-5 speeds & chevrons)
-const conveyors = [
-  // Horizontal Logistics Spine
-  {
-    tier: 5, color: '#388bfd',
-    points: [
-      [BASE_X - 25000, BASE_Y - 2000],
-      [BASE_X + 10000, BASE_Y - 2000],
-      [BASE_X + 10000, BASE_Y + 16000],
-      [BASE_X + 13000, BASE_Y + 16000]
-    ]
-  },
-  {
-    tier: 4, color: '#388bfd',
-    points: [
-      [BASE_X - 25000, BASE_Y - 1000],
-      [BASE_X + 9000, BASE_Y - 1000],
-      [BASE_X + 9000, BASE_Y + 15000],
-      [BASE_X + 13000, BASE_Y + 15000]
-    ]
-  },
-  // Vertical Bus connecting North Foundry
-  {
-    tier: 3, color: '#3b82f6',
-    points: [
-      [BASE_X - 5000, BASE_Y - 12000],
-      [BASE_X - 5000, BASE_Y - 2000]
-    ]
-  },
-  // Circular Reactor feeder
-  {
-    tier: 5, color: '#06b6d4',
-    points: [
-      [BASE_X + 8000, BASE_Y + 16000],
-      [BASE_X + 2000, BASE_Y + 22000],
-      [BASE_X - 1000, BASE_Y + 26000]
-    ]
-  }
+// Conveyor Spine (Mk.1-6)
+let conveyors = [
+  { tier: 5, color: '#388bfd', points: [
+    [BASE_X - 25000, BASE_Y - 26000],
+    [BASE_X - 1000, BASE_Y - 26000],
+    [BASE_X - 1000, BASE_Y + 10000],
+    [BASE_X + 18000, BASE_Y + 10000]
+  ]},
+  { tier: 4, color: '#0ea5e9', points: [
+    [BASE_X - 25000, BASE_Y - 24500],
+    [BASE_X - 2500, BASE_Y - 24500],
+    [BASE_X - 2500, BASE_Y + 8500],
+    [BASE_X + 18000, BASE_Y + 8500]
+  ]},
+  { tier: 3, color: '#22c55e', points: [
+    [BASE_X + 15000, BASE_Y - 36000],
+    [BASE_X + 15000, BASE_Y - 18000],
+    [BASE_X - 8000, BASE_Y - 18000]
+  ]}
 ];
 
-// 6. PIPELINES (Orange glowing liquid conduits)
+// Pipelines
 const pipelines = [
   [
-    [BASE_X - 25500, BASE_Y + 12500],
-    [BASE_X - 10000, BASE_Y + 8000],
-    [BASE_X + 5000, BASE_Y + 8000],
-    [BASE_X + 12000, BASE_Y + 8000]
+    [BASE_X - 30000, BASE_Y - 6000],
+    [BASE_X - 15000, BASE_Y - 6000],
+    [BASE_X + 12000, BASE_Y - 22000]
   ]
 ];
 
-// 7. POWER GRID (Thin green lines connecting poles)
+// Power Lines
 const powerLines = [
   [
-    [BASE_X - 25000, BASE_Y + 12000],
-    [BASE_X - 15000, BASE_Y + 2000],
-    [BASE_X, BASE_Y],
-    [BASE_X + 15000, BASE_Y],
-    [BASE_X + 25000, BASE_Y + 5000]
+    [BASE_X - 24000, BASE_Y - 40000],
+    [BASE_X - 8000, BASE_Y - 22000],
+    [BASE_X + 12000, BASE_Y - 10000],
+    [BASE_X + 28000, BASE_Y + 12000]
   ]
 ];
 
-// 8. RESOURCE NODES
-const resourceNodes = [
-  { x: BASE_X - 32000, y: BASE_Y - 18000, type: 'Железо', purity: 'Pure' },
-  { x: BASE_X - 35000, y: BASE_Y - 15000, type: 'Железо', purity: 'Normal' },
-  { x: BASE_X - 22000, y: BASE_Y - 30000, type: 'Медь', purity: 'Pure' },
-  { x: BASE_X + 42000, y: BASE_Y + 8000, type: 'Уголь', purity: 'Pure' },
-  { x: BASE_X + 45000, y: BASE_Y + 14000, type: 'Уголь', purity: 'Normal' },
-  { x: BASE_X - 5000, y: BASE_Y + 38000, type: 'Катерий', purity: 'Pure' }
+// Resource Nodes
+let resourceNodes = [
+  { x: BASE_X - 28000, y: BASE_Y - 44000, type: 'iron', purity: 'Pure', label: 'Железо (Чистое)' },
+  { x: BASE_X - 24000, y: BASE_Y - 45000, type: 'iron', purity: 'Normal', label: 'Железо (Обычное)' },
+  { x: BASE_X - 14000, y: BASE_Y - 48000, type: 'copper', purity: 'Pure', label: 'Медь (Чистая)' },
+  { x: BASE_X + 28000, y: BASE_Y - 42000, type: 'coal', purity: 'Pure', label: 'Уголь (Чистый)' },
+  { x: BASE_X + 35000, y: BASE_Y - 22000, type: 'oil', purity: 'Pure', label: 'Нефть (Чистая)' },
+  { x: BASE_X - 32000, y: BASE_Y - 2000, type: 'water', purity: 'Pure', label: 'Вода (Озеро)' },
+  { x: BASE_X + 15000, y: BASE_Y + 28000, type: 'caterium', purity: 'Pure', label: 'Катерий (Чистый)' },
+  { x: BASE_X - 12000, y: BASE_Y + 28000, type: 'limestone', purity: 'Pure', label: 'Известняк (Чистый)' }
 ];
 
-// 9. ENTITIES (Player, Lizard Doggo, Crate)
-const entities = [
-  { x: BASE_X + 2000, y: BASE_Y + 4000, type: 'player', label: 'Pioneer' },
-  { x: BASE_X + 1800, y: BASE_Y + 9500, type: 'doggo', label: 'Lizard Doggo' },
-  { x: BASE_X - 20000, y: BASE_Y - 8000, type: 'crate', label: 'Death Crate' }
+// Drop Pods
+let dropPods = [
+  { x: BASE_X - 32000, y: BASE_Y - 32000, opened: false },
+  { x: BASE_X + 32000, y: BASE_Y - 12000, opened: true },
+  { x: BASE_X + 5000, y: BASE_Y + 22000, opened: false }
 ];
 
-// 10. DROP PODS (Hard drive crash sites)
-const dropPods = [
-  { x: BASE_X - 28000, y: BASE_Y - 26000, opened: false },
-  { x: BASE_X + 38000, y: BASE_Y - 12000, opened: true },
-  { x: BASE_X + 15000, y: BASE_Y + 32000, opened: false }
+// Entities
+let entities = [
+  { x: BASE_X + 2000, y: BASE_Y - 4000, type: 'pioneer', label: 'Pioneer (Игрок)', rot: 45 },
+  { x: BASE_X - 1000, y: BASE_Y + 2000, type: 'doggo', label: 'Lizard Doggo' }
 ];
 
-// -------------------------------------------------------------
-// HIGH-FIDELITY SCIM CANVAS RENDERER
-// -------------------------------------------------------------
+// =============================================================
+// HIGH-FIDELITY RENDER LOOP
+// =============================================================
+let animTick = 0;
+function animate() {
+  animTick = (animTick + 1) % 1000;
+  redraw();
+  requestAnimationFrame(animate);
+}
+
 function redraw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 1. TERRAIN BASE & CONTOUR LINES (Topographic map backdrop)
-  drawTerrainTopography();
+  // 1. OFFICIAL 8K TOPOGRAPHICAL MAP IMAGE
+  if (document.getElementById('layer-map').checked && mapImageLoaded) {
+    const [s1x, s1y] = worldToScreen(WORLD_MIN_X, -WORLD_MIN_Y);
+    const [s2x, s2y] = worldToScreen(WORLD_MAX_X, -WORLD_MAX_Y);
+    const mw = s2x - s1x;
+    const mh = s2y - s1y;
+    ctx.drawImage(mapImage, s1x, s1y, mw, mh);
+  } else {
+    ctx.fillStyle = '#b6b0a2';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
 
-  // 2. CRATER LAKES WITH DEPTH RINGS
-  drawCraterLakes();
-
-  // 3. FOUNDATIONS (Semi-transparent 8x8m Ficsit grid)
+  // 2. FOUNDATION PLATFORMS
   if (document.getElementById('layer-foundations').checked) {
     drawFoundations();
   }
 
-  // 4. RAILWAYS (Dual tracks with cross-sleepers)
+  // 3. RAILWAYS (DUAL PINK TRACKS WITH SLEEPERS)
   if (document.getElementById('layer-railways').checked) {
     drawRailways();
   }
 
-  // 5. CONVEYOR BELTS (Detailed dual-side rails & directional chevrons)
+  // 4. CONVEYOR BELTS WITH DIRECTIONAL CHEVRONS
   if (document.getElementById('layer-conveyors').checked) {
     drawConveyors();
   }
 
-  // 6. PIPELINES (Glowing liquid conduits)
+  // 5. PIPELINES
   if (document.getElementById('layer-pipes').checked) {
     drawPipelines();
   }
 
-  // 7. POWER GRID
+  // 6. POWER GRID
   if (document.getElementById('layer-power').checked) {
     drawPowerGrid();
   }
 
-  // 8. FACTORY BUILDINGS & MACHINES (Detailed architectural silhouettes)
+  // 7. FACTORY BUILDINGS & PRODUCTION STATUS
   if (document.getElementById('layer-factories').checked) {
     drawBuildings();
   }
 
-  // 9. RESOURCE NODES (Purity badges)
+  // 8. RESOURCE NODES WITH PURITY BADGES
   if (document.getElementById('layer-nodes').checked) {
     drawResourceNodes();
   }
 
-  // 10. DROP PODS (Crash sites)
+  // 9. DROP PODS (CRASH SITES)
   if (document.getElementById('layer-pods').checked) {
     drawDropPods();
   }
 
-  // 11. ENTITIES (Player Pioneer badge, Lizard Doggo, Crates)
+  // 10. ENTITIES (PLAYER & CREATURES)
   if (document.getElementById('layer-entities').checked) {
     drawEntities();
   }
 
-  // 12. SAVED ZONES
+  // 11. SAVED ZONES
   if (document.getElementById('layer-zones').checked) {
     drawSavedZones();
   }
 
-  // 13. ACTIVE SELECTION PREVIEW (Box or Lasso)
+  // 12. ACTIVE SELECTION RECTANGLE OR LASSO
   drawActiveSelection();
 }
 
-function drawTerrainTopography() {
-  // Topographic background tint
-  ctx.fillStyle = '#cfc9bc';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  // Elevation contour curves
-  ctx.strokeStyle = 'rgba(168, 160, 145, 0.45)';
-  ctx.lineWidth = 1;
-
-  for (let r = 8000; r <= 80000; r += 12000) {
-    const [cx, cy] = worldToScreen(BASE_X, BASE_Y);
-    const rad = r * (zoom / 400);
-    ctx.beginPath();
-    ctx.arc(cx, cy, rad, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-}
-
-function drawCraterLakes() {
-  craterLakes.forEach(lake => {
-    const [cx, cy] = worldToScreen(lake.x, lake.y);
-    const r = lake.r * (zoom / 400);
-
-    // Deep water outer ring
-    ctx.fillStyle = '#5fb4cb';
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Medium depth ring
-    ctx.fillStyle = '#399eb8';
-    ctx.beginPath();
-    ctx.arc(cx, cy, r * 0.75, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Deep abyss center
-    ctx.fillStyle = '#1c7a94';
-    ctx.beginPath();
-    ctx.arc(cx, cy, r * 0.45, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Shoreline contour
-    ctx.strokeStyle = '#2b788c';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-  });
-}
-
 function drawFoundations() {
-  foundationGrids.forEach(grid => {
-    const [s1x, s1y] = worldToScreen(grid.minX, grid.minY);
-    const [s2x, s2y] = worldToScreen(grid.maxX, grid.maxY);
+  foundationGrids.forEach(g => {
+    const [s1x, s1y] = worldToScreen(g.minX, g.minY);
+    const [s2x, s2y] = worldToScreen(g.maxX, g.maxY);
     const w = s2x - s1x;
     const h = s2y - s1y;
 
-    // Translucent foundation slab
-    ctx.fillStyle = 'rgba(78, 84, 92, 0.45)';
+    ctx.fillStyle = 'rgba(45, 52, 60, 0.72)';
     ctx.fillRect(s1x, s1y, w, h);
 
-    // Foundation grid lines (8x8m = 800 UU)
-    if (zoom >= 1.5) {
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+    // 8x8m grid lines when zoomed in
+    if (zoom >= 2.0) {
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
       ctx.lineWidth = 1;
-
       const step = 800 * (zoom / 400);
-      if (step > 3) {
+      if (step > 4) {
         for (let x = s1x; x <= s2x; x += step) {
           ctx.beginPath(); ctx.moveTo(x, s1y); ctx.lineTo(x, s2y); ctx.stroke();
         }
@@ -744,9 +777,7 @@ function drawFoundations() {
         }
       }
     }
-
-    // Outer foundation concrete border
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.strokeStyle = 'rgba(250, 92, 44, 0.4)';
     ctx.lineWidth = 1.5;
     ctx.strokeRect(s1x, s1y, w, h);
   });
@@ -755,104 +786,94 @@ function drawFoundations() {
 function drawRailways() {
   railways.forEach(track => {
     if (track.length < 2) return;
+    const screenPts = track.map(p => worldToScreen(p[0], p[1]));
 
-    // Rail bed / ballast (Pink/Purple)
-    ctx.strokeStyle = '#e879f9';
-    ctx.lineWidth = Math.max(3, 5 * (zoom / 3));
+    // Outer rail glow
+    ctx.strokeStyle = '#ec4899';
+    ctx.lineWidth = Math.max(3, 7 * (zoom / 4.0));
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     ctx.beginPath();
-    track.forEach((pt, idx) => {
-      const [sx, sy] = worldToScreen(pt[0], pt[1]);
-      if (idx === 0) ctx.moveTo(sx, sy);
-      else ctx.lineTo(sx, sy);
+    screenPts.forEach((p, idx) => {
+      if (idx === 0) ctx.moveTo(p[0], p[1]);
+      else ctx.lineTo(p[0], p[1]);
     });
     ctx.stroke();
 
-    // Steel rails core (white dual rail)
+    // White rail center core
     ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = Math.max(1, 2 * (zoom / 3));
+    ctx.lineWidth = Math.max(1, 2.5 * (zoom / 4.0));
     ctx.stroke();
   });
 }
 
 function drawConveyors() {
-  conveyors.forEach(belt => {
-    if (belt.points.length < 2) return;
+  conveyors.forEach(b => {
+    if (b.points.length < 2) return;
+    const screenPts = b.points.map(p => worldToScreen(p[0], p[1]));
+    const width = Math.max(2.5, 4.5 * (zoom / 4.0));
 
-    // Outer belt border
-    ctx.strokeStyle = '#1e293b';
-    ctx.lineWidth = Math.max(3.5, 5 * (zoom / 3));
+    // Conveyor base line
+    ctx.strokeStyle = b.color || '#388bfd';
+    ctx.lineWidth = width;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     ctx.beginPath();
-    belt.points.forEach((pt, idx) => {
-      const [sx, sy] = worldToScreen(pt[0], pt[1]);
-      if (idx === 0) ctx.moveTo(sx, sy);
-      else ctx.lineTo(sx, sy);
+    screenPts.forEach((p, idx) => {
+      if (idx === 0) ctx.moveTo(p[0], p[1]);
+      else ctx.lineTo(p[0], p[1]);
     });
     ctx.stroke();
 
-    // Inner belt color
-    ctx.strokeStyle = belt.color;
-    ctx.lineWidth = Math.max(2, 3 * (zoom / 3));
-    ctx.stroke();
-
-    // Directional Chevrons / Rollers (at high zoom)
-    if (zoom >= 2.0) {
-      ctx.fillStyle = '#ffffff';
-      for (let i = 0; i < belt.points.length - 1; i++) {
-        const [p1x, p1y] = worldToScreen(belt.points[i][0], belt.points[i][1]);
-        const [p2x, p2y] = worldToScreen(belt.points[i+1][0], belt.points[i+1][1]);
-        const dist = Math.hypot(p2x - p1x, p2y - p1y);
-        const steps = Math.floor(dist / 14);
-
-        for (let s = 1; s < steps; s++) {
-          const t = s / steps;
-          const x = p1x + t * (p2x - p1x);
-          const y = p1y + t * (p2y - p1y);
-          ctx.beginPath();
-          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
+    // Directional animated chevrons when zoomed in
+    if (zoom >= 2.5) {
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1.5;
+      const offset = (animTick * 0.8) % 24;
+      ctx.setLineDash([4, 20]);
+      ctx.lineDashOffset = -offset;
+      ctx.stroke();
+      ctx.setLineDash([]);
     }
   });
 }
 
 function drawPipelines() {
-  pipelines.forEach(pipe => {
-    ctx.strokeStyle = '#f97316';
-    ctx.lineWidth = Math.max(3.5, 5.5 * (zoom / 3));
-    ctx.beginPath();
-    pipe.forEach((pt, idx) => {
-      const [sx, sy] = worldToScreen(pt[0], pt[1]);
-      if (idx === 0) ctx.moveTo(sx, sy);
-      else ctx.lineTo(sx, sy);
-    });
-    ctx.stroke();
+  pipelines.forEach(p => {
+    if (p.length < 2) return;
+    const screenPts = p.map(pt => worldToScreen(pt[0], pt[1]));
 
-    // Core
-    ctx.strokeStyle = '#fdba74';
-    ctx.lineWidth = Math.max(1.5, 2.5 * (zoom / 3));
+    ctx.strokeStyle = '#f97316';
+    ctx.lineWidth = Math.max(3, 5 * (zoom / 4.0));
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    screenPts.forEach((pt, idx) => {
+      if (idx === 0) ctx.moveTo(pt[0], pt[1]);
+      else ctx.lineTo(pt[0], pt[1]);
+    });
     ctx.stroke();
   });
 }
 
 function drawPowerGrid() {
   powerLines.forEach(line => {
-    ctx.strokeStyle = '#4ade80';
-    ctx.lineWidth = 1.2;
+    if (line.length < 2) return;
+    const screenPts = line.map(pt => worldToScreen(pt[0], pt[1]));
+
+    ctx.strokeStyle = '#22c55e';
+    ctx.lineWidth = Math.max(1, 1.5 * (zoom / 4.0));
     ctx.beginPath();
-    line.forEach((pt, idx) => {
-      const [sx, sy] = worldToScreen(pt[0], pt[1]);
-      if (idx === 0) ctx.moveTo(sx, sy);
-      else ctx.lineTo(sx, sy);
+    screenPts.forEach((pt, idx) => {
+      if (idx === 0) ctx.moveTo(pt[0], pt[1]);
+      else ctx.lineTo(pt[0], pt[1]);
     });
     ctx.stroke();
 
     // Power pole nodes
-    line.forEach(pt => {
-      const [sx, sy] = worldToScreen(pt[0], pt[1]);
+    screenPts.forEach(pt => {
       ctx.fillStyle = '#22c55e';
       ctx.beginPath();
-      ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
+      ctx.arc(pt[0], pt[1], Math.max(2, 4 * (zoom / 4.0)), 0, Math.PI * 2);
       ctx.fill();
     });
   });
@@ -861,22 +882,35 @@ function drawPowerGrid() {
 function drawBuildings() {
   buildings.forEach(b => {
     const [sx, sy] = worldToScreen(b.x, b.y);
-    const sw = b.w * (zoom / 400);
-    const sh = b.h * (zoom / 400);
+    const sw = Math.max(4, b.w * (zoom / 400));
+    const sh = Math.max(4, b.h * (zoom / 400));
 
-    // Building body
-    ctx.fillStyle = b.producing ? '#d97706' : (b.hasPower ? '#eab308' : '#ef4444');
+    // Check if inside active selection
+    let isSelected = false;
+    if (currentAnalytics && currentAnalytics.lastQuery) {
+      const q = currentAnalytics.lastQuery;
+      if (q.type === 'box') {
+        isSelected = (b.x >= q.minX && b.x <= q.maxX && b.y >= q.minY && b.y <= q.maxY);
+      } else if (q.type === 'polygon') {
+        isSelected = isInsidePoly([b.x, b.y], q.points);
+      }
+    }
+
+    // Machine housing
+    ctx.fillStyle = isSelected ? '#38bdf8' : (b.type === 'Manufacturer' ? '#ea580c' : '#2563eb');
     ctx.fillRect(sx - sw/2, sy - sh/2, sw, sh);
 
-    // Inner mechanical outline
-    ctx.strokeStyle = '#451a03';
-    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = isSelected ? '#ffffff' : '#0f172a';
+    ctx.lineWidth = isSelected ? 2 : 1;
     ctx.strokeRect(sx - sw/2, sy - sh/2, sw, sh);
 
-    // Machine roof accents
-    if (zoom >= 2.5 && sw > 8) {
-      ctx.fillStyle = '#fef3c7';
-      ctx.fillRect(sx - sw/4, sy - sh/4, sw/2, sh/2);
+    // Status light indicator
+    if (zoom >= 3.0) {
+      const ledColor = b.producing ? '#22c55e' : '#eab308';
+      ctx.fillStyle = ledColor;
+      ctx.beginPath();
+      ctx.arc(sx + sw/2 - 4, sy - sh/2 + 4, 3, 0, Math.PI * 2);
+      ctx.fill();
     }
   });
 }
@@ -884,35 +918,31 @@ function drawBuildings() {
 function drawResourceNodes() {
   resourceNodes.forEach(node => {
     const [sx, sy] = worldToScreen(node.x, node.y);
-    const r = Math.max(7, 10 * (zoom / 3));
+    const r = Math.max(10, 16 * (zoom / 4.0));
 
-    // Outer circle badge
-    ctx.fillStyle = '#ffffff';
+    // Badge circle background
+    ctx.fillStyle = '#1e2430';
     ctx.beginPath();
     ctx.arc(sx, sy, r, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = '#1e293b';
-    ctx.lineWidth = 1.5;
+
+    // Purity ring (Green = Pure, Orange = Normal, Red = Impure)
+    const ringColor = node.purity === 'Pure' ? '#22c55e' : (node.purity === 'Normal' ? '#f59e0b' : '#ef4444');
+    ctx.strokeStyle = ringColor;
+    ctx.lineWidth = Math.max(2, 3.5 * (zoom / 4.0));
     ctx.stroke();
 
-    // Node resource color
-    let resColor = '#3b82f6';
-    if (node.type === 'Медь') resColor = '#ea580c';
-    if (node.type === 'Уголь') resColor = '#1f2937';
-    if (node.type === 'Катерий') resColor = '#eab308';
-
-    ctx.fillStyle = resColor;
-    ctx.beginPath();
-    ctx.arc(sx, sy, r * 0.7, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Purity indicator rings
-    if (node.purity === 'Pure') {
-      ctx.strokeStyle = '#a855f7';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.arc(sx, sy, r + 2, 0, Math.PI * 2);
-      ctx.stroke();
+    // Center icon
+    const icon = iconCache[node.type];
+    if (icon && icon.complete) {
+      const iconSize = r * 1.3;
+      ctx.drawImage(icon, sx - iconSize/2, sy - iconSize/2, iconSize, iconSize);
+    } else {
+      ctx.fillStyle = '#fff';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(node.type[0].toUpperCase(), sx, sy);
     }
   });
 }
@@ -920,48 +950,67 @@ function drawResourceNodes() {
 function drawDropPods() {
   dropPods.forEach(pod => {
     const [sx, sy] = worldToScreen(pod.x, pod.y);
-    const size = Math.max(7, 9 * (zoom / 3));
+    const r = Math.max(9, 14 * (zoom / 4.0));
 
-    ctx.fillStyle = pod.opened ? '#94a3b8' : '#eab308';
-    ctx.save();
-    ctx.translate(sx, sy);
-    ctx.rotate(Math.PI / 4);
-    ctx.fillRect(-size/2, -size/2, size, size);
-    ctx.strokeStyle = '#0f172a';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(-size/2, -size/2, size, size);
-    ctx.restore();
+    ctx.fillStyle = pod.opened ? '#166534' : '#991b1b';
+    ctx.beginPath();
+    ctx.arc(sx, sy, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = pod.opened ? '#22c55e' : '#ef4444';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    const icon = iconCache['crash'];
+    if (icon && icon.complete) {
+      const size = r * 1.3;
+      ctx.drawImage(icon, sx - size/2, sy - size/2, size, size);
+    }
   });
 }
 
 function drawEntities() {
   entities.forEach(ent => {
     const [sx, sy] = worldToScreen(ent.x, ent.y);
-    const r = 13;
+    const r = Math.max(11, 17 * (zoom / 4.0));
 
-    // White circular badge with shadow (like SCIM)
-    ctx.shadowColor = 'rgba(0,0,0,0.5)';
-    ctx.shadowBlur = 6;
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(sx, sy, r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
+    if (ent.type === 'pioneer') {
+      // Glowing radar beacon
+      const pulse = (animTick % 60) / 60;
+      ctx.fillStyle = `rgba(56, 189, 248, ${0.4 * (1 - pulse)})`;
+      ctx.beginPath();
+      ctx.arc(sx, sy, r + pulse * 25, 0, Math.PI * 2);
+      ctx.fill();
 
-    ctx.strokeStyle = '#1e293b';
-    ctx.lineWidth = 2;
-    ctx.stroke();
+      // Pioneer avatar circle
+      ctx.fillStyle = '#0284c7';
+      ctx.beginPath();
+      ctx.arc(sx, sy, r, 0, Math.PI * 2);
+      ctx.fill();
 
-    // Icon in center
-    ctx.font = '14px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    if (ent.type === 'player') {
-      ctx.fillText('👷', sx, sy);
-    } else if (ent.type === 'doggo') {
-      ctx.fillText('🦎', sx, sy);
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      const icon = iconCache['pioneer'];
+      if (icon && icon.complete) {
+        ctx.save();
+        ctx.translate(sx, sy);
+        if (ent.rot !== undefined) ctx.rotate((ent.rot * Math.PI) / 180);
+        ctx.drawImage(icon, -r, -r, r * 2, r * 2);
+        ctx.restore();
+      }
+
+      // Name tag
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(ent.label || 'Pioneer', sx, sy - r - 6);
     } else {
-      ctx.fillText('📦', sx, sy);
+      const icon = iconCache[ent.type];
+      if (icon && icon.complete) {
+        ctx.drawImage(icon, sx - r, sy - r, r * 2, r * 2);
+      }
     }
   });
 }
@@ -969,31 +1018,26 @@ function drawEntities() {
 function drawSavedZones() {
   savedZones.forEach(z => {
     ctx.strokeStyle = z.color;
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2.5;
+    ctx.fillStyle = z.color + '26';
+
     if (z.query.type === 'box') {
       const [s1x, s1y] = worldToScreen(z.query.minX, z.query.minY);
       const [s2x, s2y] = worldToScreen(z.query.maxX, z.query.maxY);
-      ctx.fillStyle = z.color + '22'; // 15% alpha
-      ctx.fillRect(s1x, s1y, s2x - s1x, s2y - s1y);
-      ctx.strokeRect(s1x, s1y, s2x - s1x, s2y - s1y);
-      ctx.fillStyle = z.color;
-      ctx.font = 'bold 13px sans-serif';
-      ctx.fillText(z.name, s1x + 6, s1y - 8);
+      const w = s2x - s1x;
+      const h = s2y - s1y;
+      ctx.fillRect(s1x, s1y, w, h);
+      ctx.strokeRect(s1x, s1y, w, h);
     } else if (z.query.type === 'polygon') {
+      const screenPts = z.query.points.map(pt => worldToScreen(pt[0], pt[1]));
       ctx.beginPath();
-      z.query.points.forEach((pt, idx) => {
-        const [sx, sy] = worldToScreen(pt[0], pt[1]);
-        if (idx === 0) ctx.moveTo(sx, sy);
-        else ctx.lineTo(sx, sy);
+      screenPts.forEach((pt, idx) => {
+        if (idx === 0) ctx.moveTo(pt[0], pt[1]);
+        else ctx.lineTo(pt[0], pt[1]);
       });
       ctx.closePath();
-      ctx.fillStyle = z.color + '22';
       ctx.fill();
       ctx.stroke();
-      const first = worldToScreen(z.query.points[0][0], z.query.points[0][1]);
-      ctx.fillStyle = z.color;
-      ctx.font = 'bold 13px sans-serif';
-      ctx.fillText(z.name, first[0] + 6, first[1] - 8);
     }
   });
 }
@@ -1006,11 +1050,11 @@ function drawActiveSelection() {
       const w = Math.abs(boxEnd[0] - boxStart[0]);
       const h = Math.abs(boxEnd[1] - boxStart[1]);
 
-      ctx.fillStyle = 'rgba(56, 139, 253, 0.2)';
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.22)';
       ctx.fillRect(x, y, w, h);
-      ctx.strokeStyle = '#388bfd';
+      ctx.strokeStyle = '#38bdf8';
       ctx.lineWidth = 2;
-      ctx.setLineDash([5, 5]);
+      ctx.setLineDash([6, 6]);
       ctx.strokeRect(x, y, w, h);
       ctx.setLineDash([]);
     } else if (currentMode === 'lasso' && lassoPoints.length > 1) {
@@ -1026,9 +1070,9 @@ function drawActiveSelection() {
   }
 }
 
-// -------------------------------------------------------------
-// MOUSE & TOUCH EVENT HANDLING
-// -------------------------------------------------------------
+// =============================================================
+// MOUSE & TOUCH CONTROLS
+// =============================================================
 canvas.addEventListener('mousedown', (e) => {
   const rect = canvas.getBoundingClientRect();
   const mx = e.clientX - rect.left;
@@ -1085,7 +1129,13 @@ window.addEventListener('mouseup', (e) => {
   if (currentMode === 'box' && boxStart && boxEnd) {
     const [w1x, w1y] = screenToWorld(Math.min(boxStart[0], boxEnd[0]), Math.min(boxStart[1], boxEnd[1]));
     const [w2x, w2y] = screenToWorld(Math.max(boxStart[0], boxEnd[0]), Math.max(boxStart[1], boxEnd[1]));
-    performAnalytics({ type: 'box', minX: w1x, maxX: w2x, minY: w1y, maxY: w2y });
+    performAnalytics({
+      type: 'box',
+      minX: Math.min(w1x, w2x),
+      maxX: Math.max(w1x, w2x),
+      minY: Math.min(w1y, w2y),
+      maxY: Math.max(w1y, w2y)
+    });
   } else if (currentMode === 'lasso' && lassoPoints.length >= 3) {
     const worldPoly = lassoPoints.map(p => screenToWorld(p[0], p[1]));
     performAnalytics({ type: 'polygon', points: worldPoly });
@@ -1100,8 +1150,8 @@ canvas.addEventListener('wheel', (e) => {
   const my = e.clientY - rect.top;
 
   const oldZoom = zoom;
-  const delta = e.deltaY < 0 ? 1.18 : 0.84;
-  zoom = Math.max(0.3, Math.min(45.0, zoom * delta));
+  const delta = e.deltaY < 0 ? 1.2 : 0.82;
+  zoom = Math.max(0.5, Math.min(60.0, zoom * delta));
 
   panX = mx - (mx - panX) * (zoom / oldZoom);
   panY = my - (my - panY) * (zoom / oldZoom);
@@ -1121,9 +1171,9 @@ function isInsidePoly(pt, poly) {
   return inside;
 }
 
-// -------------------------------------------------------------
-// LIVE PRODUCTION & POWER ANALYTICS
-// -------------------------------------------------------------
+// =============================================================
+// PRODUCTION & POWER AGGREGATION
+// =============================================================
 function performAnalytics(query) {
   let totalBuildings = 0;
   let totalPower = 0.0;
@@ -1141,7 +1191,7 @@ function performAnalytics(query) {
 
     if (inside) {
       totalBuildings++;
-      totalPower += b.power;
+      totalPower += b.power || 0;
       if (b.producing) producingCount++;
 
       for (const [item, rate] of Object.entries(b.inputs || {})) {
@@ -1176,7 +1226,7 @@ function performAnalytics(query) {
 function renderAnalyticsPanel() {
   const panel = document.getElementById('analytics-panel');
   if (!currentAnalytics || currentAnalytics.totalBuildings === 0) {
-    panel.innerHTML = `<div class="empty-hint">В выбранной зоне нет станков или фабрик. Попробуйте выделить область с постройками.</div>`;
+    panel.innerHTML = `<div class="empty-hint">В выбранной зоне нет станков или фабрик. Обведите область с постройками.</div>`;
     return;
   }
 
@@ -1196,12 +1246,12 @@ function renderAnalyticsPanel() {
   panel.innerHTML = `
     <div class="stat-card">
       <div class="stat-row"><span>Станков в секторе:</span><span class="stat-val">${currentAnalytics.totalBuildings}</span></div>
-      <div class="stat-row"><span>Потребление энергии:</span><span class="stat-val">${currentAnalytics.totalPower.toFixed(1)} МВт</span></div>
-      <div class="stat-row"><span>КПД комплекса:</span><span class="stat-val" style="color: ${currentAnalytics.efficiency > 80 ? '#3fb950' : '#d29922'}">${currentAnalytics.efficiency.toFixed(1)}%</span></div>
+      <div class="stat-row"><span>Энергопотребление:</span><span class="stat-val">${currentAnalytics.totalPower.toFixed(1)} МВт</span></div>
+      <div class="stat-row"><span>Эффективность (КПД):</span><span class="stat-val" style="color: ${currentAnalytics.efficiency > 80 ? '#3fb950' : '#d29922'}">${currentAnalytics.efficiency.toFixed(1)}%</span></div>
     </div>
 
     <div class="stat-card">
-      <div class="panel-title" style="margin-bottom: 6px;">Сводный баланс (Net Throughput)</div>
+      <div class="panel-title" style="margin-bottom: 6px;">Сводный баланс предметов (Net Flow)</div>
       <div class="rate-list">
         ${netRows || '<div style="color:#8b949e;">Нет активного движения предметов</div>'}
       </div>
@@ -1218,7 +1268,7 @@ function saveCurrentZone() {
   const name = prompt("Название сектора:", "Сектор #" + (savedZones.length + 1));
   if (!name) return;
 
-  const colors = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#a855f7"];
+  const colors = ["#38bdf8", "#22c55e", "#f59e0b", "#ef4444", "#a855f7"];
   const color = colors[savedZones.length % colors.length];
 
   savedZones.push({
@@ -1240,7 +1290,7 @@ function updateSavedZonesList() {
   c.innerHTML = savedZones.map((z, idx) => `
     <div class="saved-zone-badge" style="border-left-color: ${z.color}" onclick="focusZone(${idx})">
       <span style="font-weight: 600;">${z.name}</span>
-      <span style="font-size: 11px; color: #8b949e;">Показать</span>
+      <span style="font-size: 11px; color: #8b949e;">Показать ➡</span>
     </div>
   `).join('');
 }
@@ -1252,8 +1302,106 @@ function focusZone(idx) {
   redraw();
 }
 
-// Initial draw
+// =============================================================
+// LIVE FRM (FICSIT REMOTE MONITORING) BRIDGE
+// =============================================================
+async function fetchLiveData() {
+  try {
+    const pResp = await fetch(`${frmHost}/getPlayer`, { signal: AbortSignal.timeout(2500) });
+    if (pResp.ok) {
+      const pData = await pResp.json();
+      if (Array.isArray(pData) && pData.length > 0) {
+        entities = pData.map(p => ({
+          x: p.location.x,
+          y: p.location.y,
+          type: 'pioneer',
+          label: p.PlayerName || 'Pioneer',
+          rot: p.rotation ? p.rotation.yaw : 0
+        }));
+      }
+      setOnlineStatus(true);
+    }
+
+    // Fetch buildings
+    const fResp = await fetch(`${frmHost}/getFactory`, { signal: AbortSignal.timeout(3000) });
+    if (fResp.ok) {
+      const fData = await fResp.json();
+      if (Array.isArray(fData)) {
+        buildings = fData.map(f => {
+          const inMap = {};
+          const outMap = {};
+          (f.Ingredients || []).forEach(i => inMap[i.Name] = i.CurrentConsumed || 0);
+          (f.Production || []).forEach(p => outMap[p.Name] = p.CurrentProd || 0);
+
+          return {
+            x: f.location.x,
+            y: f.location.y,
+            w: 1600, h: 1800,
+            type: f.Name,
+            power: f.PowerConsumption || 0,
+            producing: f.IsProducing || false,
+            inputs: inMap,
+            outputs: outMap
+          };
+        });
+      }
+    }
+
+    // Fetch belts
+    const bResp = await fetch(`${frmHost}/getBelts`, { signal: AbortSignal.timeout(3000) });
+    if (bResp.ok) {
+      const bData = await bResp.json();
+      if (Array.isArray(bData)) {
+        conveyors = bData.map(b => ({
+          tier: 4,
+          color: '#388bfd',
+          points: (b.SplinePoints || []).map(pt => [pt.x, pt.y])
+        })).filter(b => b.points.length >= 2);
+      }
+    }
+
+    redraw();
+  } catch (e) {
+    setOnlineStatus(false);
+  }
+}
+
+function setOnlineStatus(online) {
+  isOnline = online;
+  const dot = document.getElementById('status-dot');
+  const text = document.getElementById('status-text');
+  if (online) {
+    dot.className = 'status-dot online';
+    text.innerText = 'В сети: FRM Live';
+    text.style.color = '#22c55e';
+  } else {
+    dot.className = 'status-dot';
+    text.innerText = 'Демо-комплекс (Офлайн)';
+    text.style.color = '#eab308';
+  }
+}
+
+function toggleAutoSync() {
+  const btn = document.getElementById('btn-autosync');
+  if (autoSyncInterval) {
+    clearInterval(autoSyncInterval);
+    autoSyncInterval = null;
+    btn.innerText = '⏱ Авто: Выкл';
+    btn.style.color = '#c9d1d9';
+  } else {
+    fetchLiveData();
+    autoSyncInterval = setInterval(fetchLiveData, 2000);
+    btn.innerText = '⏱ Авто: 2с';
+    btn.style.color = '#22c55e';
+  }
+}
+
+// Check FRM on load
+fetchLiveData();
+
+// Start animation loop
 resizeCanvas();
+animate();
 </script>
 </body>
 </html>
