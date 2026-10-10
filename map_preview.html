@@ -1305,65 +1305,79 @@ function focusZone(idx) {
 // =============================================================
 // LIVE FRM (FICSIT REMOTE MONITORING) BRIDGE
 // =============================================================
-async function fetchLiveData() {
+async function requestFRM(endpoint) {
+  // 1. Try local proxy via serve.py
   try {
-    const pResp = await fetch(`${frmHost}/getPlayer`, { signal: AbortSignal.timeout(2500) });
-    if (pResp.ok) {
-      const pData = await pResp.json();
-      if (Array.isArray(pData) && pData.length > 0) {
-        entities = pData.map(p => ({
-          x: p.location.x,
-          y: p.location.y,
-          type: 'pioneer',
-          label: p.PlayerName || 'Pioneer',
-          rot: p.rotation ? p.rotation.yaw : 0
-        }));
-      }
-      setOnlineStatus(true);
+    const res = await fetch(`/frm/${endpoint}`, { signal: AbortSignal.timeout(2000) });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && !data.error) return data;
     }
+  } catch (e) {}
 
-    // Fetch buildings
-    const fResp = await fetch(`${frmHost}/getFactory`, { signal: AbortSignal.timeout(3000) });
-    if (fResp.ok) {
-      const fData = await fResp.json();
-      if (Array.isArray(fData)) {
-        buildings = fData.map(f => {
-          const inMap = {};
-          const outMap = {};
-          (f.Ingredients || []).forEach(i => inMap[i.Name] = i.CurrentConsumed || 0);
-          (f.Production || []).forEach(p => outMap[p.Name] = p.CurrentProd || 0);
-
-          return {
-            x: f.location.x,
-            y: f.location.y,
-            w: 1600, h: 1800,
-            type: f.Name,
-            power: f.PowerConsumption || 0,
-            producing: f.IsProducing || false,
-            inputs: inMap,
-            outputs: outMap
-          };
-        });
-      }
+  // 2. Direct connection to FRM host
+  try {
+    const res = await fetch(`${frmHost}/${endpoint}`, {
+      headers: { 'X-FRM-Authorization': 'H2AZH4bcEQ6jvSu1DbFFfrQXj8UWCLQt' },
+      signal: AbortSignal.timeout(2000)
+    });
+    if (res.ok) {
+      return await res.json();
     }
+  } catch (e) {}
 
-    // Fetch belts
-    const bResp = await fetch(`${frmHost}/getBelts`, { signal: AbortSignal.timeout(3000) });
-    if (bResp.ok) {
-      const bData = await bResp.json();
-      if (Array.isArray(bData)) {
-        conveyors = bData.map(b => ({
-          tier: 4,
-          color: '#388bfd',
-          points: (b.SplinePoints || []).map(pt => [pt.x, pt.y])
-        })).filter(b => b.points.length >= 2);
-      }
-    }
+  return null;
+}
 
-    redraw();
-  } catch (e) {
+async function fetchLiveData() {
+  const pData = await requestFRM('getPlayer');
+  if (pData && Array.isArray(pData) && pData.length > 0) {
+    entities = pData.map(p => ({
+      x: p.location.x,
+      y: p.location.y,
+      type: 'pioneer',
+      label: p.PlayerName || 'Pioneer',
+      rot: p.rotation ? p.rotation.yaw : 0
+    }));
+    setOnlineStatus(true);
+  } else {
     setOnlineStatus(false);
+    return;
   }
+
+  // Fetch factories
+  const fData = await requestFRM('getFactory');
+  if (fData && Array.isArray(fData)) {
+    buildings = fData.map(f => {
+      const inMap = {};
+      const outMap = {};
+      (f.Ingredients || []).forEach(i => inMap[i.Name] = i.CurrentConsumed || 0);
+      (f.Production || []).forEach(p => outMap[p.Name] = p.CurrentProd || 0);
+
+      return {
+        x: f.location.x,
+        y: f.location.y,
+        w: 1600, h: 1800,
+        type: f.Name,
+        power: f.PowerConsumption || 0,
+        producing: f.IsProducing || false,
+        inputs: inMap,
+        outputs: outMap
+      };
+    });
+  }
+
+  // Fetch belts
+  const bData = await requestFRM('getBelts');
+  if (bData && Array.isArray(bData)) {
+    conveyors = bData.map(b => ({
+      tier: 4,
+      color: '#388bfd',
+      points: (b.SplinePoints || []).map(pt => [pt.x, pt.y])
+    })).filter(b => b.points.length >= 2);
+  }
+
+  redraw();
 }
 
 function setOnlineStatus(online) {
